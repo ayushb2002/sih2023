@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
 class RescueTeam(models.Model):
-    team_id = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
-    team_size = models.IntegerField(null=False, blank=False)
+    team_name = models.CharField(max_length=50, null=False, blank=False, default="")
     address_line_1 = models.CharField(max_length=30, null=False, blank=False)
     address_line_2 = models.CharField(max_length=30, null=True, blank=True)
     city = models.CharField(max_length=30, null=False, blank=False)
@@ -14,7 +13,14 @@ class RescueTeam(models.Model):
     category = ArrayField(models.CharField(max_length=100, null=False, blank=False))
     
     def __str__(self):
-        return self.category
+        return self.team_name
+
+class Member(models.Model):
+    team = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    
+    def __str__(self):
+        return self.user
 
 class RequestItems(models.Model):
     _from = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, null=False, blank=False)
@@ -24,7 +30,10 @@ class RequestItems(models.Model):
     requested_items_desc = ArrayField(models.CharField(max_length=100))
     deadline = models.DateField(null=False, blank=False)
     priority_call = models.BooleanField(null=False, blank=False, default=False)
-    completed = models.BooleanField(null=False, blank=False, default=False)    
+    completed = models.BooleanField(null=False, blank=False, default=False)   
+    
+    def __str__(self):
+        return self.deadline 
     
 class RequestHelp(models.Model):
     _from = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, blank=False)
@@ -33,3 +42,6 @@ class RequestHelp(models.Model):
     deadline = models.DateField(null=False, blank=False)
     completed = models.BooleanField(null=False, blank=False, default=False)   
     priority_call = models.BooleanField(null=False, blank=False, default=False)
+    
+    def __str__(self):
+        return self.deadline

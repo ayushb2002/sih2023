@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.page-heading{
+    margin: 2%;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.form-heading{
+    margin: 2%;
+    font-size: 1.4em;
+    font-weight: 400;
+}

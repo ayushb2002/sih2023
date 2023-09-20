@@ -3,11 +3,12 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
 
 class RescueTeam(models.Model):
-    team_name = models.CharField(max_length=50, null=False, blank=False, default="")
+    team_name = models.CharField(max_length=50, null=False, blank=False)
     address_line_1 = models.CharField(max_length=30, null=False, blank=False)
     address_line_2 = models.CharField(max_length=30, null=True, blank=True)
     city = models.CharField(max_length=30, null=False, blank=False)
     state = models.CharField(max_length=30, null=False, blank=False)
+    pincode = models.BigIntegerField(null=False, blank=False)
     gps_coordinate = models.CharField(max_length=50, null=False, blank=False)
     contact = models.CharField(max_length=100, null=False, blank=False)
     category = ArrayField(models.CharField(max_length=100, null=False, blank=False))

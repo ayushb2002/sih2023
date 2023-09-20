@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Suraksha Portal | Register
+{% endblock title %}
+
+{% block body %}
+<div class="container-fluid" >
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <h2 class="display-4">
+                Registration Form | Suraksha Portal   
+            </h2>
+        </div>
+        <div class="col-sm-12">
+            {% block register %}
+
+            {% endblock register %}
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -61,12 +61,12 @@ def registerMember(request):
             request.session['username'] = email
             request.session['name'] = fname + ' ' + lname
             
-            return render(request, 'login.html', {'username': request.session['username'], 'name': request.session['name']})
+            return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
         except:
             return HttpResponse('Could not create user')
     else:
         if request.session.get('username'):
-            return render(request, 'login.html', {'username': request.session['username'], 'name': request.session['name']})
+            return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
         else:
             return HttpResponse('Method not allowed!')
         
@@ -78,24 +78,27 @@ def loginUser(request):
         return render(request, 'welcome.html', context)
     
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')     
-        
-        user = authenticate(username=email, password=password)
-        if user is not None:
-            request.session['username'] = email
-            request.session['name'] = user.first_name + ' ' + user.last_name
-            context = {
-                "username": email,
-                "name": user.first_name + ' ' + user.last_name
-            }
-            return render(request, "welcome.html", context)
-        else:
-            return HttpResponse('Invalid username or password!')
+        try:
+            email = request.POST.get('email')
+            password = request.POST.get('password')     
+            
+            user = authenticate(username=email, password=password)
+            if user is not None:
+                request.session['username'] = email
+                request.session['name'] = user.first_name + ' ' + user.last_name
+                context = {
+                    "username": email,
+                    "name": user.first_name + ' ' + user.last_name
+                }
+                return render(request, "welcome.html", context)
+            else:
+                return HttpResponse('Invalid username or password!')
+        except Exception as e:
+            return HttpResponse(e)
     else:
         return HttpResponse('Method not allowed!')
 
 def logout(request):
-    request.session.pop('username')
-    request.session.pop('name')
+    del request.session['username']
+    del request.session['name']
     return render(request, "index.html", {})

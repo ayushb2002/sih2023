@@ -49,12 +49,16 @@
             </label>
             <input type="number" min="100000" max="999999" name="pincode" class="form-control">
         </div>
-        <div class="form-group">
+        <div class="form-row align-items-center my-3">
             <label for="gps">
                 GPS Coordinates
             </label>
-            <input type="text" name="gps" class="form-control" id="coordinateField">
-            <button type="button" onclick="getLocation()">Get GPS Coordinates</button>
+            <div class="col-auto">
+                <input type="text" name="gps" class="form-control" id="coordinateField">
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-warning" onclick="getLocation()">Get GPS Coordinates</button>
+            </div>
         </div>
         <div class="form-group">
             <label for="email">

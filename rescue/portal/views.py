@@ -110,10 +110,14 @@ def registerService(request):
             gps = request.POST.get('gps')
             contact = request.POST.get('contact')
             
-            if RescueTeam.objects.filter(email=email):
-                return HttpResponse('User already exists!')
+            if User.objects.filter(email=email):
+                return HttpResponse('Team already registered!')
             
-            rescue_team = RescueTeam.objects.create(team_name=team_name, category=category, email=email, password=password, contact=contact, address_line_1=addr_line_1, address_line_2=addr_line_2, city=city, state=state, pincode=pincode, gps_coordinate=gps)
+            user = User.objects.create_user(username=email, email=email, password=password)
+            user.first_name = team_name
+            user.save()
+            
+            rescue_team = RescueTeam(team_name=team_name, category=category, contact=contact, address_line_1=addr_line_1, address_line_2=addr_line_2, city=city, state=state, pincode=pincode, gps_coordinate=gps, user=user)
             rescue_team.save()
             
             request.session['username'] = email
@@ -169,19 +173,24 @@ def loginService(request):
             email = request.POST.get('email')+"@suraksha.com"
             password = request.POST.get('password')     
             
-            team = RescueTeam.objects.get(email=email, password=password)
+            user = authenticate(username=email, password=password)
+            if user is None:
+                return HttpResponse('Invalid username or password!')
+            
+            team = RescueTeam.objects.get(user=user)
             if team is not None:
-                request.session['username'] = team.email
+                request.session['username'] = user.email
                 request.session['name'] = team.team_name
                 context = {
-                    "username": team.email,
+                    "username": user.email,
                     "name": team.team_name
                 }
                 return render(request, "welcome.html", context)
             else:
                 return HttpResponse('Invalid username or password!')
         except Exception as e:
-            return HttpResponse(e)
+            print(e)
+            return HttpResponse('Server Error! Please try again later.')
     else:
         return HttpResponse('Method not allowed!')
 

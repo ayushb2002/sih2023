@@ -339,3 +339,71 @@ def requestItems(request):
     context['type'] = request.session.get('type')
     
     return render(request, "request/itemRequest.html", context)
+
+def recordRequestedItems(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == "POST":
+        category = request.POST.get('category')
+        itemList = request.POST.get('itemNameArr').split(',')
+        qtyList = request.POST.get('itemQtyArr').split(',')
+        descList = request.POST.get('itemDescArr').split(',')
+        deadline = request.POST.get('deadline')
+        
+        try:
+            user = User.objects.get(username=request.session.get('username'))
+            team = RescueTeam.objects.get(user=user)
+            
+            reqItem = RequestItems(_from=team, requested_category=category, requested_items=itemList, requested_quantity=qtyList, requested_items_desc=descList, deadline=deadline)
+            reqItem.save()
+            context['message'] = "Request submitted successfully. We wish you all the best!"
+            
+            return render(request, "request/itemRequest.html", context)
+        except Exception as e:
+            print(e)
+            context['message'] = 'Your request could not be recorded because of a server error!'
+            return render(request, "request/itemRequest.html", context)
+    else:
+        return HttpResponse('Method not allowed!')
+    
+def trackItemRequests(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    user = User.objects.get(username=request.session.get('username'))
+    team = RescueTeam.objects.get(user=user)
+    reqList = RequestItems.objects.filter(_from=team).values()
+    requestData = []
+    for data in reqList:
+        dataDict = {
+            "category": data['requested_category'],
+            "deadline": data['deadline'],
+            "priority": data['priority_call'],
+            "completed": data['completed'],
+            "answered": data['answered'],
+            "answeredBy": data['answeredBy'],
+            "items": []
+        }
+        
+        for i in range(len(data['requested_items'])):
+            dataDict['items'].append({
+                "name": data['requested_items'][i], 
+                "qty": data['requested_quantity'][i], 
+                "desc": data['requested_items_desc'][i]
+            })
+            
+        requestData.append(dataDict)
+    
+    context['requests'] = requestData
+    return render(request, "request/trackItems.html", context)

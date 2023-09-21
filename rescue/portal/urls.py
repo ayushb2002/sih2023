@@ -18,4 +18,6 @@ urlpatterns = [
     path("viewMembers", views.viewMembers, name="viewMembers"),
     path("updateMembers", views.findAndDeleteTeamMember, name="updateMembers"),
     path("requestItems", views.requestItems, name="requestItems"),
+    path("recordRequestedItems", views.recordRequestedItems, name="recordRequestedItems"),
+    path("trackItems", views.trackItemRequests, name="trackItems"),
 ]

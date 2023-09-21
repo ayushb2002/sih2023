@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | Track requests
+{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <span class="page-heading">
+                Track requested items | Suraksha portal
+            </span>
+        </div>
+        {% for request in requests %}
+        <div class="col-sm-12 p-3">
+            <span>Category: {{request.category}}</span> <br>
+            <span>Deadline: {{request.deadline}}</span> <br>
+            <span>Completion status: {{request.completed}}</span> <br>
+            {% if request.answered %}
+            <span>Answered By: {{request.answeredBy}}</span> <br>
+            {% endif %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item name</th>
+                        <th>Item quantity</th>
+                        <th>Item description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in request.items %}
+                    <tr>
+                        <td>{{item.name}}</td>
+                        <td>{{item.qty}}</td>
+                        <td>{{item.desc}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

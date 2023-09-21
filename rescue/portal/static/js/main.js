@@ -115,7 +115,7 @@ function requestItems() {
 
 function freezeItems()
 {
-    alert('Freezing items... deleting items will still be requested now!')
+    alert('Freezing items... deleted items will still be requested now!')
     nameArr = document.getElementById("itemNameArr");
     qtyArr = document.getElementById("itemQtyArr");
     descArr = document.getElementById("itemDescArr");

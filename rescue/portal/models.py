@@ -33,10 +33,11 @@ class RequestItems(models.Model):
     deadline = models.DateField(null=False, blank=False)
     priority_call = models.BooleanField(null=False, blank=False, default=False)
     completed = models.BooleanField(null=False, blank=False, default=False)   
+    answered = models.BooleanField(null=False, blank=False, default=False)
+    answeredBy = models.CharField(max_length=50, null=True, blank=False)
     
     def __str__(self):
         return self.deadline 
-    
 class RequestHelp(models.Model):
     _from = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, blank=False)
     description = models.CharField(max_length=200, null=False, blank=False)

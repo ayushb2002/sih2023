@@ -41,8 +41,15 @@
                     </div>
                 </li>
                 {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="url" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Login
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'login/service' %}">Authority</a>
+                        <a class="dropdown-item" href="{% url 'login/member' %}">Employee</a>
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="url" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -50,8 +57,8 @@
                         Register
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url 'service' %}">Authority</a>
-                        <a class="dropdown-item" href="{% url 'member' %}">Employee</a>
+                        <a class="dropdown-item" href="{% url 'register/service' %}">Authority</a>
+                        <a class="dropdown-item" href="{% url 'register/member' %}">Employee</a>
                     </div>
                 </li>
                 {% endif %}

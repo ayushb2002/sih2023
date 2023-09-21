@@ -3,7 +3,7 @@
 {% block register %}
 
 <div class="m-5 text-center">
-    <span class="form-heading">Member registration</span>
+    <span class="form-heading">Employee registration</span>
     <form action="{% url 'registerMember' %}" method="post" class="text-left">
         {% csrf_token %}
         <div class="form-group">
@@ -22,7 +22,12 @@
             <label for="email">
                 Email Address
             </label>
-            <input type="email" name="email" class="form-control">
+            <div class="input-group">
+                <input type="email" name="email" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text">@suraksha.com</span>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="password">

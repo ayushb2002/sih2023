@@ -11,22 +11,9 @@ Suraksha Portal | Login
         <div class="col-sm-12 text-center">
             <span class="page-heading">Login form | Suraksha Portal</span>
         </div>
-        <div class="col-sm-12 p-5">
-            <form action="{% url 'loginUser' %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" name="email" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" class="form-control">
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-success" type="submit">Login</button>
-                </div>
-            </form>
-        </div>
+        {% block login %}
+        
+        {% endblock login %}
     </div>
 </div>
 

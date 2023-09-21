@@ -4,8 +4,8 @@
 
 
 <div class="m-5 text-center">
-    <span class="form-heading">Station registration</span>
-    <form action="{% url 'registerMember' %}" method="post" class="text-left">
+    <span class="form-heading">Authority registration</span>
+    <form action="{% url 'registerService' %}" method="post" class="text-left">
         {% csrf_token %}
         <div class="form-group">
             <label for="name">
@@ -18,6 +18,12 @@
                 Category
             </label>
             <input type="text" name="category" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="contact">
+                Contact Number
+            </label>
+            <input type="text" name="contact" class="form-control">
         </div>
         <div class="form-group">
             <label for="line1">
@@ -64,7 +70,12 @@
             <label for="email">
                 Email Address
             </label>
-            <input type="email" name="email" class="form-control">
+            <div class="input-group">
+                <input type="email" name="email" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text">@suraksha.com</span>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label for="password">

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | Raise a request
+{% endblock title %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center p-3">
+            <span class="page-heading">Raise a request | Suraksha Portal</span>
+        </div>
+        <div class="col-sm-12">
+            <form action="#" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" name="category" class="form-control" placeholder="Enter a single category!">
+                </div>
+                <div class="form-group p-5">
+                    <input type="hidden" name="itemNameArr" id="itemNameArr">
+                    <input type="hidden" name="itemQtyArr" id="itemQtyArr">
+                    <input type="hidden" name="itemDescArr" id="itemDescArr">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item name</th>
+                                <th>Quantity requested</th>
+                                <th>Description</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="items-table">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" id="freeze">
+                    <div class="col-sm-12 px-5 d-flex justify-content-end">
+                        <button class="btn btn-info" type="button" onclick="freezeItems()">Freeze items</button>
+                    </div>
+                    <div class="col-lg-3 col-sm-12 form-group">
+                        <label for="itemName">Item name</label>
+                        <input type="text" name="itemName" id="itemName" class="form-control">
+                    </div>
+                    <div class="col-lg-3 col-sm-12 form-group">
+                        <label for="itemQty">Quantity</label>
+                        <input type="number" name="itemQty" min="0" id="itemQty" class="form-control">
+                    </div>
+                    <div class="col-lg-3 col-sm-12 form-group">
+                        <label for="itemDesc">Description</label>
+                        <input type="text" name="itemDesc" id="itemDesc" class="form-control">
+                    </div>
+                    <div class="col-lg-3 col-sm-12 form-group">
+                        <label for="btn">Click to add</label>
+                        <button class="btn btn-primary form-control" type="button" name="btn"
+                            onclick="requestItems()" id="addItemBtn">Add Items</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -328,4 +328,14 @@ def findAndDeleteTeamMember(request):
             return HttpResponse('Server error! Please try again later!')
     else:
         return HttpResponse("Method not allowed!")
+
+def requestItems(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
     
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    return render(request, "request/itemRequest.html", context)

@@ -16,5 +16,6 @@ urlpatterns = [
     path("addMember", views.addMember, name="addMember"),
     path("addMemberResponse", views.addMemberResponse, name="addMemberResponse"),
     path("viewMembers", views.viewMembers, name="viewMembers"),
-    path("updateMembers", views.findAndDeleteTeamMember, name="updateMembers")
+    path("updateMembers", views.findAndDeleteTeamMember, name="updateMembers"),
+    path("requestItems", views.requestItems, name="requestItems"),
 ]

@@ -11,7 +11,7 @@ Suraksha Portal | Employees
             <span class="page-heading">Suraksha Portal | View and edit employees</span>
         </div>
         <div class="col-sm-12 my-2">
-            <form action="#" method="post">
+            <form action="{% url "updateMembers" %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="email">Employee's Email Address registered on Suraksha Portal</label>
@@ -46,7 +46,15 @@ Suraksha Portal | Employees
                     <tr>
                         <td>{{member.name}}</td>
                         <td>{{member.username}}</td>
-                        <td></td>
+                        <td>
+                            <form action="{% url 'updateMembers' %}" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="hidden" name="email" value="{{member.email}}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

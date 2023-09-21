@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import RescueTeam, RequestHelp, RequestItems, Member
@@ -255,18 +255,20 @@ def addMemberResponse(request):
             user = User.objects.get(username=member_email)
             team = RescueTeam.objects.get(user=User.objects.get(username=team_email))
             
-            if Member.objects.get(user=user):
-                return HttpResponse('Member already registered!')
-            
-            member = Member.objects.create(user=user, team=team)
-            member.save()
-            
             context = {}
             context['username'] = request.session.get('username')
             context['name'] = request.session.get('name')
             context['type'] = request.session.get('type')
-            context['message'] = 'Member added successfully'
-            return render(request, "auth/addMember.html", context)
+            
+            try:
+                member = Member.objects.get(user=user)
+                context['message'] = "Member already added in a team!"
+                return render(request, "auth/addMember.html", context)
+            except Member.DoesNotExist:    
+                member = Member.objects.create(user=user, team=team)
+                member.save()
+                context['message'] = 'Member added successfully'
+                return render(request, "auth/addMember.html", context)
         except Exception as e:
             print(e)
             return HttpResponse('Server Error! Please try again later!')
@@ -292,9 +294,38 @@ def viewMembers(request):
         username, name = member.split(',')
         userData.append({
             "name": name,
-            "username": username
+            "username": username,
+            "email": username.split('@')[0]
         })
     
-    print(userData)
     context['members'] = userData
     return render(request, "auth/updateMember.html", context)
+
+def findAndDeleteTeamMember(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    if request.method == "POST":
+        try:
+            context = {}
+            context['username'] = request.session.get('username')
+            context['name'] = request.session.get('name')
+            context['type'] = request.session.get('type')
+            
+            team_user = User.objects.get(username=request.session.get('username'))
+            team = RescueTeam.objects.get(user=team_user)
+            email = request.POST.get('email')+"@suraksha.com"
+            user = User.objects.get(username=email)
+            if user is not None:
+                member = Member.objects.get(user=user, team=team)
+                member.delete()
+                return redirect(viewMembers)
+            else:
+                context['message'] = "User does not exist!"
+                return render(request, "auth/updateMember.html", context)
+        except Exception as e:
+            print(e)
+            return HttpResponse('Server error! Please try again later!')
+    else:
+        return HttpResponse("Method not allowed!")
+    

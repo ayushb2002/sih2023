@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | Employees
+{% endblock title %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center my-3">
+            <span class="page-heading">Suraksha Portal | View and edit employees</span>
+        </div>
+        <div class="col-sm-12 my-2">
+            <form action="#" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email">Employee's Email Address registered on Suraksha Portal</label>
+                    <div class="input-group">
+                        <input type="text" name="email" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text">@suraksha.com</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Find and delete</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 text-center">
+            {% if message %}
+                <span class="text text-success">{{message}}</span>
+            {% endif %}
+        </div>
+        <div class="col-sm-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>{{member.name}}</td>
+                        <td>{{member.username}}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock body %}

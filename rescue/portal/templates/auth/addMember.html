@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | Add employee
+{% endblock title %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center my-3">
+            <span class="page-heading">Suraksha Portal | Add employee to your branch!</span>
+        </div>
+        <div class="col-sm-12 p-5">
+            <form action="{% url 'addMemberResponse' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email">Employee's Email Address registered on Suraksha Portal</label>
+                    <div class="input-group">
+                        <input type="text" name="email" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text">@suraksha.com</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Add to team</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 text-center">
+            {% if message %}
+                <span class="text text-success">{{message}}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}

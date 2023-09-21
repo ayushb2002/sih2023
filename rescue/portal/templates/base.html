@@ -30,6 +30,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'welcome' %}">Home</a>
                 </li>
+                {% if type == "service" %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Actions
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url "addMember" %}">Add employee</a>
+                        <a class="dropdown-item" href="{% url "viewMembers" %}">View & Update employees</a>
+                    </div>
+                </li>
+                {% endif %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">

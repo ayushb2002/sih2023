@@ -13,4 +13,7 @@ urlpatterns = [
     path("loginService", views.loginService, name="loginService"),
     path("logout", views.logout, name="logout"),
     path("welcome", views.welcome, name="welcome"),
+    path("addMember", views.addMember, name="addMember"),
+    path("addMemberResponse", views.addMemberResponse, name="addMemberResponse"),
+    path("viewMembers", views.viewMembers, name="viewMembers"),
 ]

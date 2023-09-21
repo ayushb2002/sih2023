@@ -4,18 +4,22 @@ from django.contrib.auth import authenticate
 from .models import RescueTeam, RequestHelp, RequestItems, Member
 
 def index(request):
-    context = {}
     if request.session.get('username'):
+        context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-    return render(request, 'index.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, "auth/welcome.html", context)
+        
+    return render(request, 'index.html')
 
 def memberReg(request):
     if request.session.get('username'):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     return render(request, 'register/member.html')
 
@@ -24,7 +28,8 @@ def serviceReg(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     return render(request, 'register/service.html')
 
@@ -33,7 +38,8 @@ def memberLog(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     return render(request, 'login/member.html')
 
@@ -42,7 +48,8 @@ def serviceLog(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     return render(request, 'login/service.html')
 
@@ -51,7 +58,8 @@ def registerMember(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     if request.method == 'POST':
         try:
@@ -70,13 +78,14 @@ def registerMember(request):
             
             request.session['username'] = email
             request.session['name'] = fname + ' ' + lname
+            request.session['type'] = "member"
             
-            return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
+            return render(request, 'auth/welcome.html', {'username': request.session['username'], 'name': request.session['name'], "type": request.session['type']})
         except:
             return HttpResponse('Could not create user')
     else:
         if request.session.get('username'):
-            return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
+            return render(request, 'auth/welcome.html', {'username': request.session['username'], 'name': request.session['name']})
         else:
             return HttpResponse('Method not allowed!')
 
@@ -85,7 +94,8 @@ def login(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     return render(request, 'login.html')
 
@@ -94,7 +104,8 @@ def registerService(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     if request.method == 'POST':
         try:
@@ -122,8 +133,9 @@ def registerService(request):
             
             request.session['username'] = email
             request.session['name'] = team_name
+            request.session['type'] = 'service'
             
-            return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
+            return render(request, 'auth/welcome.html', {'username': request.session['username'], 'name': request.session['name'], 'type': request.session['type']})
         except Exception as e:
             print(e)
             user = User.objects.get(username=email)
@@ -133,7 +145,7 @@ def registerService(request):
             return HttpResponse('Could not create user')
     else:
         if request.session.get('username'):
-            return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
+            return render(request, 'auth/welcome.html', {'username': request.session['username'], 'name': request.session['name'], 'type': request.session['type']})
         else:
             return HttpResponse('Method not allowed!')
         
@@ -142,7 +154,8 @@ def loginMember(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     if request.method == 'POST':
         try:
@@ -153,11 +166,13 @@ def loginMember(request):
             if user is not None:
                 request.session['username'] = email
                 request.session['name'] = user.first_name + ' ' + user.last_name
+                request.session['type'] = 'member'
                 context = {
                     "username": email,
-                    "name": user.first_name + ' ' + user.last_name
+                    "name": user.first_name + ' ' + user.last_name,
+                    "type": 'member'
                 }
-                return render(request, "welcome.html", context)
+                return render(request, "auth/welcome.html", context)
             else:
                 return HttpResponse('Invalid username or password!')
         except Exception as e:
@@ -170,7 +185,8 @@ def loginService(request):
         context = {}
         context['username'] = request.session.get('username')
         context['name'] = request.session.get('name')
-        return render(request, 'welcome.html', context)
+        context['type'] = request.session.get('type')
+        return render(request, 'auth/welcome.html', context)
     
     if request.method == 'POST':
         try:
@@ -185,11 +201,13 @@ def loginService(request):
             if team is not None:
                 request.session['username'] = user.email
                 request.session['name'] = team.team_name
+                request.session['type'] = 'service'
                 context = {
                     "username": user.email,
-                    "name": team.team_name
+                    "name": team.team_name,
+                    "type": "service"
                 }
-                return render(request, "welcome.html", context)
+                return render(request, "auth/welcome.html", context)
             else:
                 return HttpResponse('Invalid username or password!')
         except Exception as e:
@@ -201,13 +219,82 @@ def loginService(request):
 def logout(request):
     del request.session['username']
     del request.session['name']
-    return render(request, "index.html", {})
+    del request.session['type']
+    return render(request, "index.html")
 
 def welcome(request):
-    if not request.session.get('username') or not request.session.get('name'):
+    if not request.session.get('username'):
         return HttpResponse('404! Page not found!')
     
     context = {}
     context['username'] = request.session.get('username')
     context['name'] = request.session.get('name')
-    return render(request, "welcome.html", context)
+    context['type'] = request.session.get('type')
+    return render(request, "auth/welcome.html", context)
+
+def addMember(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    return render(request, "auth/addMember.html", context)
+
+def addMemberResponse(request):
+    if not request.session.get('username'):
+        return HttpResponse('Bad Request')
+    
+    if request.method == "POST":
+        try:
+            member_email = request.POST.get("email")+"@suraksha.com"
+            team_email = request.session.get('username')
+            
+            user = User.objects.get(username=member_email)
+            team = RescueTeam.objects.get(user=User.objects.get(username=team_email))
+            
+            if Member.objects.get(user=user):
+                return HttpResponse('Member already registered!')
+            
+            member = Member.objects.create(user=user, team=team)
+            member.save()
+            
+            context = {}
+            context['username'] = request.session.get('username')
+            context['name'] = request.session.get('name')
+            context['type'] = request.session.get('type')
+            context['message'] = 'Member added successfully'
+            return render(request, "auth/addMember.html", context)
+        except Exception as e:
+            print(e)
+            return HttpResponse('Server Error! Please try again later!')
+    else:
+        return HttpResponse('Method not allowed!')
+    
+def viewMembers(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    user = User.objects.get(username=request.session.get('username'))
+    team = RescueTeam.objects.get(user=user)
+    members = Member.objects.filter(team=team)
+    
+    userData = []
+    for member in members:
+        member = str(member)
+        username, name = member.split(',')
+        userData.append({
+            "name": name,
+            "username": username
+        })
+    
+    print(userData)
+    context['members'] = userData
+    return render(request, "auth/updateMember.html", context)

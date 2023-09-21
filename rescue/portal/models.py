@@ -22,7 +22,7 @@ class Member(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     
     def __str__(self):
-        return self.user
+        return self.user.username + ',' + self.user.first_name + ' ' + self.user.last_name
 
 class RequestItems(models.Model):
     _from = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, null=False, blank=False)

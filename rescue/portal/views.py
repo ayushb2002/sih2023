@@ -99,7 +99,7 @@ def registerService(request):
     if request.method == 'POST':
         try:
             team_name = request.POST.get('name')
-            category = request.POST.get('category')
+            category = request.POST.get('category').split(',')
             email = request.POST.get('email')+"@suraksha.com"
             password = request.POST.get('password')
             addr_line_1 = request.POST.get('line1')
@@ -126,6 +126,10 @@ def registerService(request):
             return render(request, 'welcome.html', {'username': request.session['username'], 'name': request.session['name']})
         except Exception as e:
             print(e)
+            user = User.objects.get(username=email)
+            if user is not None:
+                user.delete()
+            
             return HttpResponse('Could not create user')
     else:
         if request.session.get('username'):
@@ -198,3 +202,12 @@ def logout(request):
     del request.session['username']
     del request.session['name']
     return render(request, "index.html", {})
+
+def welcome(request):
+    if not request.session.get('username') or not request.session.get('name'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    return render(request, "welcome.html", context)

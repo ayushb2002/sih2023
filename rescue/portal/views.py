@@ -397,6 +397,7 @@ def trackItemRequests(request):
             "completed": data['completed'],
             "answered": data['answered'],
             "answeredBy": data['answeredBy'],
+            "id": data['id'],
             "items": []
         }
         
@@ -518,3 +519,54 @@ def viewAcceptedItemRequests(request):
         print(e)
         context['message'] = "No request backlog!"
         return render(request, 'request/acceptedItemRequests.html', context)
+    
+def markItemCompleted(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == "POST":
+        try:
+            requestId = request.POST.get('id')
+            reqObj = RequestItems.objects.get(id=requestId)
+            reqObj.completed = True
+            reqObj.save()
+            
+            context["message"] = "Successfully marked as completed!"
+            return render(request, "request/trackItems.html", context)
+        except Exception as e:
+            print(e)
+            context["message"] = "Cannot be marked as completed!"
+            return render(request, "request/trackItems.html", context)
+    else:
+        return HttpResponse('Method not allowed')    
+    
+
+def markItemUrgent(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == "POST":
+        try:
+            requestId = request.POST.get('id')
+            reqObj = RequestItems.objects.get(id=requestId)
+            reqObj.priority_call = True
+            reqObj.save()
+            
+            context["message"] = "Successfully marked as completed!"
+            return render(request, "request/trackItems.html", context)
+        except Exception as e:
+            print(e)
+            context["message"] = "Cannot be marked as completed!"
+            return render(request, "request/trackItems.html", context)
+    else:
+        return HttpResponse('Method not allowed')   

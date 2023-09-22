@@ -13,10 +13,18 @@ Suraksha Portal | Track requests
                 Track requested items | Suraksha portal
             </span>
         </div>
+        {% if message %}
+        <div class="col-sm-12 text-center">
+            <span class="text-warning">
+                {{message}}
+            </span>
+        </div>
+        {% endif %}
         {% for request in requests %}
         <div class="col-sm-12 p-3">
             <span>Category: {{request.category}}</span> <br>
             <span>Deadline: {{request.deadline}}</span> <br>
+            <span>Priority: {{request.priority}}</span> <br>
             <span>Completion status: {{request.completed}}</span> <br>
             {% if request.answered %}
             <span>Answered By: {{request.answeredBy}}</span> <br>
@@ -39,6 +47,22 @@ Suraksha Portal | Track requests
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="col-sm-12 p-3 d-flex justify-content-end">
+            {% if not request.completed %}
+            <form action="{% url 'markItemCompleted' %}" method="post" class="mx-2">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{request.id}}">
+                <button type="submit" class="btn btn-success">Mark as completed</button>
+            </form>
+            {% endif %}
+            {% if request.answered and not request.priority %}
+            <form action="{% url 'markItemUrgent' %}" method="post" class="mx-2">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{request.id}}">
+                <button type="submit" class="btn btn-danger">Raise urgency</button>
+            </form>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

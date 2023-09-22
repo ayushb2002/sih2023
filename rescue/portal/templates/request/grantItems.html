@@ -43,9 +43,9 @@ Suraksha Portal | Fulfill Requests
             </table>
         </div>
         <div class="col-sm-12 p-3 d-flex justify-content-end">
-            <form action="#" method="post">
+            <form action="{% url 'acceptRequest' %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="request" value="{{request.from}}">
+                <input type="hidden" name="id" value="{{request.id}}">
                 <button class="btn btn-info" type="submit">Accept request</button>
             </form>
         </div>

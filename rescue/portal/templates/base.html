@@ -47,9 +47,10 @@
                         Requests
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="{% url "requestItems" %}">Issue request</a>
-                        <a class="dropdown-item" href="{% url "trackItems" %}">View requests</a>
-                        <a class="dropdown-item" href="{% url "grantItems" %}">Fulfill requests</a>
+                        <a class="dropdown-item" href="{% url "requestItems" %}">Raise a request</a>
+                        <a class="dropdown-item" href="{% url "trackItems" %}">View my requests</a>
+                        <a class="dropdown-item" href="{% url "grantItems" %}">Fulfill a requests</a>
+                        <a class="dropdown-item" href="{% url "viewAcceptedRequest" %}">View accepted requests</a>
                     </div>
                 </li>
                 {% endif %}

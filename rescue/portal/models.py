@@ -15,7 +15,7 @@ class RescueTeam(models.Model):
     user = models.OneToOneField(User, blank=False, null=False, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.team_name
+        return self.team_name + " " + self.contact
 
 class Member(models.Model):
     team = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, null=False, blank=False)

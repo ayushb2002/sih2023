@@ -21,4 +21,6 @@ urlpatterns = [
     path("recordRequestedItems", views.recordRequestedItems, name="recordRequestedItems"),
     path("trackItems", views.trackItemRequests, name="trackItems"),
     path("grantItems", views.grantItems, name="grantItems"),
+    path("acceptRequest", views.acceptRequestForItems, name="acceptRequest"),
+    path("viewAcceptedRequest", views.viewAcceptedItemRequests, name="viewAcceptedRequest"),
 ]

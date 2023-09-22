@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | View accepted requests
+{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <span class="page-heading">
+                View accepted requests | Suraksha Portal
+            </span>
+        </div>
+
+        {% if message %}
+        <div class="col-sm-12 text-center">
+            <span class="text-warning">
+                {{message}}
+            </span>
+        </div>
+        {% endif %}
+
+        {% for request in requests %}
+            <div class="col-sm-12 p-3">
+                <span>Priority: {{request.priority}}</span> <br>
+                <span>Deadline: {{request.deadline}}</span> <br>
+                <span>Requested by: {{request.name}}</span> <br>
+                <span>Requesting party contact: {{request.team_contact}}</span> <br>
+                <span>Requesting party email: {{request.team_email}}</span>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item name</th>
+                            <th>Item quantity</th>
+                            <th>Item description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in request.items %}
+                        <tr>
+                            <td>{{item.name}}</td>
+                            <td>{{item.qty}}</td>
+                            <td>{{item.desc}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

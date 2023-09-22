@@ -430,7 +430,7 @@ def grantItems(request):
             team_det = RescueTeam.objects.get(id=data["_from_id"])
             user_det = User.objects.get(username=team_det.user)
             dataDict = {
-                "from": user_det.username,
+                "id": data["id"],
                 "name": user_det.first_name + " " + user_det.last_name,
                 "category": data['requested_category'],
                 "deadline": data['deadline'],
@@ -453,3 +453,68 @@ def grantItems(request):
         print(e)
         context['message'] = "No requests to display!"
         return render(request, "request/grantItems.html", context)
+    
+def acceptRequestForItems(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == 'POST':
+        try:
+            requestId = request.POST.get('id')
+            reqItem = RequestItems.objects.get(id=requestId)
+            reqItem.answered = True
+            reqItem.answeredBy = request.session.get('username')
+            reqItem.save()
+            context['message'] = "Thank you for accepting this request! Head to the accepted requests page for further information."
+        except Exception as e:
+            print(e)
+            context['message'] = "Could not accept this request!"
+            
+        return render(request, 'request/grantItems.html', context)
+    else:
+        return HttpResponse('Method not allowed')    
+    
+def viewAcceptedItemRequests(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    try:
+        reqList = RequestItems.objects.filter(answered=True, completed=False, answeredBy=request.session.get('username')).values()
+        requestData = []
+        for data in reqList:
+            team_det = RescueTeam.objects.get(id=data["_from_id"])
+            user_det = User.objects.get(username=team_det.user)
+            dataDict = {
+                "name": user_det.first_name + " " + user_det.last_name,
+                "team_contact": team_det.contact,
+                "team_email": user_det.email,
+                "deadline": data['deadline'],
+                "priority": data['priority_call'],
+                "items": []
+            }
+                
+            for i in range(len(data['requested_items'])):
+                dataDict['items'].append({
+                    "name": data['requested_items'][i], 
+                    "qty": data['requested_quantity'][i], 
+                    "desc": data['requested_items_desc'][i]
+                })
+                    
+            requestData.append(dataDict)
+            
+        context['requests'] = requestData
+        return render(request, 'request/acceptedItemRequests.html', context)
+    except Exception as e:
+        print(e)
+        context['message'] = "No request backlog!"
+        return render(request, 'request/acceptedItemRequests.html', context)

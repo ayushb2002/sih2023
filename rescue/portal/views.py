@@ -592,6 +592,35 @@ def requestHelp(request):
     
     return render(request, 'help/requestHelp.html', context)
 
+def saveRequestedHelp(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == "POST":
+        try:
+            deadline = request.POST.get('deadline')
+            categories = request.POST.get('categories').split(',')
+            description = request.POST.get('description')
+            user = User.objects.get(username=request.session.get('username'))
+            team = RescueTeam.objects.get(user=user)
+            
+            reqHelp = RequestHelp.objects.create(_from=team, description=description, categories_requested=categories, deadline=deadline)
+            reqHelp.save()
+            
+            context["message"] = "Request for help successfully registered! We wish you all the best!"
+            return render(request, "help/requestHelp.html", context)            
+        except Exception as e:
+            print(e)
+            context["message"] = "Could not register your request! Please try again later!"
+            return render(request, "help/requestHelp.html", context) 
+    else:
+        return HttpResponse('Method not allowed!')
+
 def trackHelp(request):
     if not request.session.get('username'):
         return HttpResponse('404! Page not found!')

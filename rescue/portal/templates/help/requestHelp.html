@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} 
+{% block title %}
 Suraksha Portal | Request for help
 {% endblock title %}
 
@@ -8,15 +8,53 @@ Suraksha Portal | Request for help
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-12 text-center">
+        <div class="col-sm-12 text-center my-3">
             <span class="page-heading">
                 Request for help | Suraksha Portal
             </span>
         </div>
+        {% if message %}
+        <div class="col-sm-12 p-5">
+            <span class="text-warning">{{message}}</span>
+        </div>
+        {% endif %}
         <div class="col-sm-12">
-            <form action="#" method="post">
+            <form action="{% url 'saveRequestedHelp' %}" method="post">
+                {% csrf_token %}
                 <div class="form-group">
-                    <label for=""></label>
+                    <label for="deadline">Deadline</label>
+                    <input type="date" name="deadline" class="form-control">
+                </div>
+                <div class="form-row align-items-center my-3" id="freeze">
+                    <label for="category">Add categories</label>
+                    <div class="col-auto">
+                        <input type="text" name="category" id="category" class="form-control">
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-warning" onclick="requestHelp()">Add</button>
+                    </div>
+                </div>
+                <div class="form-group d-flex jusitfy-content-end p-3" style="width: 100%;">
+                    <button type="button" class="btn btn-info" onclick="freezeHelp()">Freeze</button>
+                </div>
+                <div class="form-group">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryStore"></tbody>
+                    </table>
+                    <input type="hidden" name="categories" id="categories">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Request Help</button>
                 </div>
             </form>
         </div>

@@ -13,58 +13,6 @@ function showPosition(position) {
     x.value = "Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude;
 }
 
-// function requestItems()
-// {
-//     itemName = document.getElementById("itemName");
-//     itemQty = document.getElementById("itemQty");
-//     itemDesc = document.getElementById("itemDesc");
-
-//     if (itemName.value == "" || itemQty.value == "" || itemDesc.value == "")
-//         return;
-
-//     nameArr = document.getElementById("itemNameArr");
-//     qtyArr = document.getElementById("itemQtyArr");
-//     descArr = document.getElementById("itemDescArr");
-
-//     row = document.createElement("tr");
-//     col1 = document.createElement("td");
-//     data1 = document.createTextNode(itemName.value);
-//     col2 = document.createElement("td");
-//     data2 = document.createTextNode(itemQty.value);
-//     col3 = document.createElement("td");
-//     data3 = document.createTextNode(itemDesc.value);
-//     col4 = document.createElement("td");
-//     data4 = document.createElement("button");
-//     data4.classList.add('btn', 'btn-danger')
-//     data4.innerHTML = "Delete";
-
-//     data4.onclick = function (e){
-//         let clickedBtn = e.target;
-//         clickedBtn.closest("tr").remove();
-//     }
-
-//     col1.appendChild(data1);
-//     col2.appendChild(data2);
-//     col3.appendChild(data3);
-//     col4.appendChild(data4);
-
-//     row.appendChild(col1);
-//     row.appendChild(col2);
-//     row.appendChild(col3);
-//     row.appendChild(col4);
-
-//     table = document.getElementById("items-table");
-//     table.appendChild(row);
-
-//     nameArr.value += `,${itemName.value}`;
-//     qtyArr.value += `,${itemQty.value}`;
-//     descArr.value += `,${itemDesc.value}`;
-
-//     itemName.value = "";
-//     itemQty.value = "";
-//     itemDesc.value = "";
-// }
-
 let itemData = [];
 
 function requestItems() {
@@ -99,9 +47,7 @@ function requestItems() {
 
     deleteButton.onclick = function () {
         const rowIndex = this.parentElement.parentElement.rowIndex-1;
-        console.log(rowIndex);
         itemData.splice(rowIndex, 1);
-        console.log(itemData)
         table.deleteRow(rowIndex);
     };
 
@@ -136,6 +82,58 @@ function freezeItems()
     nameArr.value = a;
     qtyArr.value = b;
     descArr.value = c;
+
+    document.getElementById('freeze').remove();
+}
+
+let helpData = [];
+
+function requestHelp() {
+    const category = document.getElementById("category");
+
+    if (category.value === "") {
+        return;
+    }
+
+    helpData.push(category.value);
+
+    const table = document.getElementById("categoryStore");
+    const row = table.insertRow();
+    
+    const cell = row.insertCell();
+    cell.appendChild(document.createTextNode(category.value));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add('btn', 'btn-danger');
+    deleteButton.setAttribute("type", "button");
+    deleteButton.innerHTML = "Delete";
+
+    deleteButton.onclick = function () {
+        const rowIndex = this.parentElement.parentElement.rowIndex-1;
+        helpData.splice(rowIndex, 1);
+        table.deleteRow(rowIndex);
+    };
+
+    const cell1 = row.insertCell();
+    cell1.appendChild(deleteButton);
+
+    category.value = "";
+}
+
+function freezeHelp()
+{
+    alert('Freezing categories... deleted categories will still be considered now!')
+    categories = document.getElementById("categories");
+
+    let a = "";
+
+    for (var i = 0; i < helpData.length; i++)
+    {
+        a += helpData[i] + ',';
+    }
+
+    a = a.slice(0, -1);
+    categories.value = a;
 
     document.getElementById('freeze').remove();
 }

@@ -29,4 +29,5 @@ urlpatterns = [
     path("trackHelp", views.trackHelp, name="trackHelp"),
     path("grantHelp", views.grantHelp, name="grantHelp"),
     path("grantedHelp", views.grantedHelp, name="grantedHelp"),
+    path("saveRequestedHelp", views.saveRequestedHelp, name="saveRequestedHelp"),
 ]

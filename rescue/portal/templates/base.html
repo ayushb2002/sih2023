@@ -44,13 +44,25 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        Requests
+                        Item Requests
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{% url "requestItems" %}">Raise a request</a>
                         <a class="dropdown-item" href="{% url "trackItems" %}">View my requests</a>
                         <a class="dropdown-item" href="{% url "grantItems" %}">Fulfill a requests</a>
                         <a class="dropdown-item" href="{% url "viewAcceptedRequest" %}">View accepted requests</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Help Requests
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url "requestHelp" %}">Raise a request</a>
+                        <a class="dropdown-item" href="{% url "trackHelp" %}">View my requests</a>
+                        <a class="dropdown-item" href="{% url "grantHelp" %}">Fulfill a requests</a>
+                        <a class="dropdown-item" href="{% url "grantedHelp" %}">View accepted requests</a>
                     </div>
                 </li>
                 {% endif %}

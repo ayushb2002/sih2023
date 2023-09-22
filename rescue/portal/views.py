@@ -580,3 +580,47 @@ def markItemUrgent(request):
             return render(request, "request/trackItems.html", context)
     else:
         return HttpResponse('Method not allowed')   
+    
+def requestHelp(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    return render(request, 'help/requestHelp.html', context)
+
+def trackHelp(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    return render(request, "help/trackHelp.html", context)
+    
+def grantHelp(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    return render(request, "help/grantHelp.html", context)
+    
+def grantedHelp(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    return render(request, "help/grantedHelp.html", context)

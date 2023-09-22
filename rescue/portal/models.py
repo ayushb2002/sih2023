@@ -34,7 +34,7 @@ class RequestItems(models.Model):
     priority_call = models.BooleanField(null=False, blank=False, default=False)
     completed = models.BooleanField(null=False, blank=False, default=False)   
     answered = models.BooleanField(null=False, blank=False, default=False)
-    answeredBy = models.CharField(max_length=50, null=True, blank=False)
+    answeredBy = models.CharField(max_length=50, null=False, blank=False, default="")
     
     def __str__(self):
         return str(self.deadline) 
@@ -45,6 +45,8 @@ class RequestHelp(models.Model):
     deadline = models.DateField(null=False, blank=False)
     completed = models.BooleanField(null=False, blank=False, default=False)   
     priority_call = models.BooleanField(null=False, blank=False, default=False)
+    answered = models.BooleanField(null=False, blank=False, default=False)
+    answeredBy = models.CharField(max_length=50, null=False, blank=False, default="")
     
     def __str__(self):
         return str(self.deadline)

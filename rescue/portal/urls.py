@@ -24,5 +24,9 @@ urlpatterns = [
     path("acceptRequest", views.acceptRequestForItems, name="acceptRequest"),
     path("viewAcceptedRequest", views.viewAcceptedItemRequests, name="viewAcceptedRequest"),
     path("markItemCompleted", views.markItemCompleted, name="markItemCompleted"),
-    path("markItemUrgent", views.markItemUrgent, name="markItemUrgent")
+    path("markItemUrgent", views.markItemUrgent, name="markItemUrgent"),
+    path("requestHelp", views.requestHelp, name="requestHelp"),
+    path("trackHelp", views.trackHelp, name="trackHelp"),
+    path("grantHelp", views.grantHelp, name="grantHelp"),
+    path("grantedHelp", views.grantedHelp, name="grantedHelp"),
 ]

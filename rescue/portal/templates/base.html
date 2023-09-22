@@ -49,8 +49,7 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="{% url "requestItems" %}">Issue request</a>
                         <a class="dropdown-item" href="{% url "trackItems" %}">View requests</a>
-                        <a class="dropdown-item" href="#">Fulfill requests</a>
-
+                        <a class="dropdown-item" href="{% url "grantItems" %}">Fulfill requests</a>
                     </div>
                 </li>
                 {% endif %}

@@ -63,8 +63,8 @@ def registerMember(request):
     
     if request.method == 'POST':
         try:
-            fname = request.POST.get('fname')
-            lname = request.POST.get('lname')
+            fname = request.POST.get('fname').upper()
+            lname = request.POST.get('lname').upper()
             email = request.POST.get('email')+"@suraksha.com"
             password = request.POST.get('password')
             
@@ -109,17 +109,19 @@ def registerService(request):
     
     if request.method == 'POST':
         try:
-            team_name = request.POST.get('name')
+            team_name = request.POST.get('name').upper()
             category = request.POST.get('category').split(',')
             email = request.POST.get('email')+"@suraksha.com"
             password = request.POST.get('password')
-            addr_line_1 = request.POST.get('line1')
-            addr_line_2 = request.POST.get('line2')
-            city = request.POST.get('city')
-            state = request.POST.get('state')
-            pincode = request.POST.get('pincode')
+            addr_line_1 = request.POST.get('line1').upper()
+            addr_line_2 = request.POST.get('line2').upper()
+            city = request.POST.get('city').upper()
+            state = request.POST.get('state').upper()
+            pincode = request.POST.get('pincode').upper()
             gps = request.POST.get('gps')
             contact = request.POST.get('contact')
+            
+            category = [i.upper() for i in category]
             
             if User.objects.filter(email=email):
                 return HttpResponse('Team already registered!')
@@ -350,7 +352,7 @@ def recordRequestedItems(request):
     context['type'] = request.session.get('type')
     
     if request.method == "POST":
-        category = request.POST.get('category')
+        category = request.POST.get('category').upper()
         itemList = request.POST.get('itemNameArr').split(',')
         qtyList = request.POST.get('itemQtyArr').split(',')
         descList = request.POST.get('itemDescArr').split(',')
@@ -359,6 +361,8 @@ def recordRequestedItems(request):
         try:
             user = User.objects.get(username=request.session.get('username'))
             team = RescueTeam.objects.get(user=user)
+            
+            qtyList = [int(i) for i in qtyList]
             
             reqItem = RequestItems(_from=team, requested_category=category, requested_items=itemList, requested_quantity=qtyList, requested_items_desc=descList, deadline=deadline)
             reqItem.save()
@@ -407,3 +411,45 @@ def trackItemRequests(request):
     
     context['requests'] = requestData
     return render(request, "request/trackItems.html", context)
+
+def grantItems(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    try:
+        user = User.objects.get(username=request.session.get('username'))
+        team = RescueTeam.objects.get(user=user)
+        reqList = RequestItems.objects.filter(requested_category__in=team.category, completed=False, answered=False).exclude(_from=team).values()
+        requestData = []
+        for data in reqList:
+            team_det = RescueTeam.objects.get(id=data["_from_id"])
+            user_det = User.objects.get(username=team_det.user)
+            dataDict = {
+                "from": user_det.username,
+                "name": user_det.first_name + " " + user_det.last_name,
+                "category": data['requested_category'],
+                "deadline": data['deadline'],
+                "priority": data['priority_call'],
+                "items": []
+            }
+            
+            for i in range(len(data['requested_items'])):
+                dataDict['items'].append({
+                    "name": data['requested_items'][i], 
+                    "qty": data['requested_quantity'][i], 
+                    "desc": data['requested_items_desc'][i]
+                })
+                
+            requestData.append(dataDict)
+        
+        context['requests'] = requestData
+        return render(request, "request/grantItems.html", context)
+    except Exception as e:
+        print(e)
+        context['message'] = "No requests to display!"
+        return render(request, "request/grantItems.html", context)

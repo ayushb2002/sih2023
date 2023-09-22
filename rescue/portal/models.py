@@ -37,7 +37,7 @@ class RequestItems(models.Model):
     answeredBy = models.CharField(max_length=50, null=True, blank=False)
     
     def __str__(self):
-        return self.deadline 
+        return str(self.deadline) 
 class RequestHelp(models.Model):
     _from = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, blank=False)
     description = models.CharField(max_length=200, null=False, blank=False)
@@ -47,4 +47,4 @@ class RequestHelp(models.Model):
     priority_call = models.BooleanField(null=False, blank=False, default=False)
     
     def __str__(self):
-        return self.deadline
+        return str(self.deadline)

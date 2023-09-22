@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | Fulfill Requests
+{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <span class="page-heading">
+                Fulfill Requests | Suraksha Portal
+            </span>
+        </div>
+        {% if message %}
+        <div class="col-sm-12 text-center p-5">
+            <span class="text-warning">{{message}}</span>
+        </div>
+        {% endif %}
+        {% for request in requests %}
+        <div class="col-sm-12 p-3">
+            <span>Category: {{request.category}}</span> <br>
+            <span>Deadline: {{request.deadline}}</span> <br>
+            <span>Requested by: {{request.name}}</span> <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item name</th>
+                        <th>Item quantity</th>
+                        <th>Item description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in request.items %}
+                    <tr>
+                        <td>{{item.name}}</td>
+                        <td>{{item.qty}}</td>
+                        <td>{{item.desc}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12 p-3 d-flex justify-content-end">
+            <form action="#" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="request" value="{{request.from}}">
+                <button class="btn btn-info" type="submit">Accept request</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

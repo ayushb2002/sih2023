@@ -436,6 +436,11 @@ def grantItems(request):
                 "category": data['requested_category'],
                 "deadline": data['deadline'],
                 "priority": data['priority_call'],
+                "addr_line_1": team_det.address_line_1,
+                "addr_line_2": team_det.address_line_2,
+                "city": team_det.city,
+                "state": team_det.state,
+                "pincode": team_det.pincode,
                 "items": []
             }
             
@@ -501,6 +506,11 @@ def viewAcceptedItemRequests(request):
                 "team_email": user_det.email,
                 "deadline": data['deadline'],
                 "priority": data['priority_call'],
+                "addr_line_1": team_det.address_line_1,
+                "addr_line_2": team_det.address_line_2,
+                "city": team_det.city,
+                "state": team_det.state,
+                "pincode": team_det.pincode,
                 "items": []
             }
                 
@@ -562,7 +572,7 @@ def markItemUrgent(request):
             reqObj.priority_call = True
             reqObj.save()
             
-            context["message"] = "Successfully marked as completed!"
+            context["message"] = "Priority request raised!"
             return render(request, "request/trackItems.html", context)
         except Exception as e:
             print(e)

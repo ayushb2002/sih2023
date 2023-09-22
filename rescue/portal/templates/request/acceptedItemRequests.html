@@ -23,12 +23,20 @@ Suraksha Portal | View accepted requests
         {% endif %}
 
         {% for request in requests %}
-            <div class="col-sm-12 p-3">
+            <div class="col-sm-6 p-3">
                 <span>Priority: {{request.priority}}</span> <br>
                 <span>Deadline: {{request.deadline}}</span> <br>
                 <span>Requested by: {{request.name}}</span> <br>
                 <span>Requesting party contact: {{request.team_contact}}</span> <br>
                 <span>Requesting party email: {{request.team_email}}</span>
+            </div>
+            <div class="col-sm-6 p-3">
+                <span>Address: {{request.addr_line_1}}, {{request.addr_line_2}}</span> <br>
+                <span>City: {{request.city}}</span>
+                <span>State: {{request.state}}</span>
+                <span>Pincode: {{request.pincode}}</span>
+            </div>
+            <div class="col-sm-12 p-3">
                 <table class="table">
                     <thead>
                         <tr>

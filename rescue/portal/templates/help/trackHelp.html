@@ -13,6 +13,117 @@ Suraksha Portal | Track Help Request
                 Track help request | Suraksha Portal
             </span>
         </div>
+        {% if message %}
+        <div class="col-sm-12 text-center">
+            <span class="text-warning">
+                {{message}}
+            </span>
+        </div>
+        {% endif %}
+
+        {% for request in requests %}
+        <div class="col-sm-12 row p-5">
+            <div class="col-lg-6 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>{{request.deadline}}</td>
+                        </tr>
+                        <tr>
+                            <td>Categories</td>
+                            <td>
+                                <ul class="no-decoration">
+                                {% for category in request.categories %}
+                                    <li>{{category}}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td>{{request.description}}</td>
+                        </tr>
+                        <tr>
+                            <td>Priority</td>
+                            <td>{{request.priority}}</td>
+                        </tr>
+                        {% if request.completed %}
+                        <tr>
+                            <td>Completed</td>
+                            <td>{{request.completed}}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            {% if request.answered %}
+            <div class="col-lg-6 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Team Name</td>
+                            <td>{{request.answeredByName}}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact details</td>
+                            <td>{{request.answeredByContact}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email Address</td>
+                            <td>{{request.answeredByEmail}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{request.answeredByAddress}}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>{{request.answeredByCity}}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>{{request.answeredByState}}</td>
+                        </tr>
+                        <tr>
+                            <td>Pincode</td>
+                            <td>{{request.answeredByPincode}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+            {% if request.answered and not request.completed %}
+            <div class="col-sm-12 d-flex justify-content-end">
+                {% if not request.priority %}
+                <form action="{% url "markHelpUrgent" %}" method="post" class="mx-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{request.id}}">
+                    <button type="submit" class="btn btn-danger">Raise urgency</button>
+                </form>
+                {% endif %}
+                <form action="{% url "markHelpCompleted" %}" method="post" class="mx-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{request.id}}">
+                    <button type="submit" class="btn btn-success">Mark completed</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
     </div>
 </div>
 

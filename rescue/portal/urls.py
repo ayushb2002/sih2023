@@ -30,4 +30,7 @@ urlpatterns = [
     path("grantHelp", views.grantHelp, name="grantHelp"),
     path("grantedHelp", views.grantedHelp, name="grantedHelp"),
     path("saveRequestedHelp", views.saveRequestedHelp, name="saveRequestedHelp"),
+    path("lendHelp", views.lendHelp, name="lendHelp"),
+    path("markHelpCompleted", views.markHelpCompleted, name="markHelpCompleted"),
+    path("markHelpUrgent", views.markHelpUrgent, name="markHelpUrgent")
 ]

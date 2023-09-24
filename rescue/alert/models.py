@@ -11,4 +11,3 @@ class Alert(models.Model):
     state = models.CharField(max_length=100, null=False, blank=False)
     categories = ArrayField(models.CharField(max_length=50, null=False, blank=False))
     description = models.CharField(max_length=400, null=False, blank=True)
-    responders = ArrayField(models.CharField(max_length=50, null=False, blank=False))

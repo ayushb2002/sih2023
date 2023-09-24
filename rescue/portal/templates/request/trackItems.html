@@ -56,7 +56,7 @@ Suraksha Portal | Track requests
                 <button type="submit" class="btn btn-success">Mark as completed</button>
             </form>
             {% endif %}
-            {% if request.answered and not request.priority %}
+            {% if request.answered and not request.priority and not request.completed %}
             <form action="{% url 'markItemUrgent' %}" method="post" class="mx-2">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{request.id}}">

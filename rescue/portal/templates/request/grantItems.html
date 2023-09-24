@@ -51,10 +51,12 @@ Suraksha Portal | Fulfill Requests
             </table>
         </div>
         <div class="col-sm-12 p-3 d-flex justify-content-end">
+            <a href="https://www.google.com/maps/place/{{request.lat}},{{request.long}}" target="_blank"><button type="button"
+                    class="btn btn-primary mx-3">View on map</button></a>
             <form action="{% url 'acceptRequest' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{request.id}}">
-                <button class="btn btn-info" type="submit">Accept request</button>
+                <button class="btn btn-info mx-3" type="submit">Accept request</button>
             </form>
         </div>
         {% endfor %}

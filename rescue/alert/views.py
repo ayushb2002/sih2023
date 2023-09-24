@@ -7,6 +7,9 @@ from .consumers import AlertConsumer
 from django.http import JsonResponse
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate
+import json
 
 def websocket_send_alert(alert):
     channel_layer = get_channel_layer()
@@ -108,12 +111,14 @@ def sendAlert(request):
         except Exception as e:
             print(e)
             return HttpResponse('Server error!')
-        
+
+@csrf_exempt
 def app_login_authority(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.get(username=username, password=password)
+        request_body = json.loads(request.body.decode("utf-8"))
+        username = request_body['username']
+        password = request_body['password']
+        user =authenticate(username=username, password=password)
         if user is None:
             return JsonResponse({"error": "Invalid username or password!"})
         
@@ -127,17 +132,20 @@ def app_login_authority(request):
                 "username": username,
                 "name": user.first_name+" "+user.last_name,
                 "city": team.city,
-                "state": team.state
+                "state": team.state,
+                "type": "service"
             }
         )
     else:
         return JsonResponse({"error": "Method not allowed!"})
-    
+
+@csrf_exempt
 def app_login_employee(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = User.objects.get(username=username, password=password)
+        request_body = json.loads(request.body.decode("utf-8"))
+        username = request_body['username']
+        password = request_body['password']
+        user = authenticate(username=username, password=password)
         if user is None:
             return JsonResponse({"error": "Invalid username or password!"})
         
@@ -155,7 +163,8 @@ def app_login_employee(request):
                 "username": username,
                 "name": user.first_name+" "+user.last_name,
                 "city": team.city,
-                "state": team.state
+                "state": team.state,
+                "type": "employee"
             }
         )
     else:

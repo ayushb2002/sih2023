@@ -431,6 +431,7 @@ def grantItems(request):
         for data in reqList:
             team_det = RescueTeam.objects.get(id=data["_from_id"])
             user_det = User.objects.get(username=team_det.user)
+            location = team_det.gps_coordinate.split(' ')
             dataDict = {
                 "id": data["id"],
                 "name": user_det.first_name + " " + user_det.last_name,
@@ -442,6 +443,8 @@ def grantItems(request):
                 "city": team_det.city,
                 "state": team_det.state,
                 "pincode": team_det.pincode,
+                "lat": location[1],
+                "long": location[3],
                 "items": []
             }
             

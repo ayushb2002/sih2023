@@ -2,8 +2,6 @@ from django.shortcuts import render, HttpResponse
 from portal.models import RescueTeam, Member
 from django.contrib.auth.models import User
 from .models import Alert
-from django.db.models import Q
-from .consumers import AlertConsumer 
 from django.http import JsonResponse
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -95,10 +93,6 @@ def sendAlert(request):
             description = request.POST.get('description')
             categories = request.POST.getlist('categories')
             categories = [i.upper() for i in categories]
-            
-            category_matches = Q()
-            for category in team.category:
-                category_matches |= Q(category__contains=[category])
                 
             alert = Alert.objects.create(from_employee=user, from_team=team, location=location, city=city, state=state, categories=categories, description=description)
             alert.save()
@@ -167,5 +161,40 @@ def app_login_employee(request):
                 "type": "employee"
             }
         )
+    else:
+        return JsonResponse({"error": "Method not allowed!"})
+    
+@csrf_exempt
+def register_app_alert(request):
+    if request.method == "POST":
+        request_body = json.loads(request.body.decode("utf-8"))
+        
+        username = request_body["username"]
+        categories = request_body["categories"]
+        categories = [i.upper() for i in categories]
+        location = request_body["location"]
+        city = request_body["city"].upper()
+        state = request_body["state"].upper()
+        description = request_body["description"]
+        
+        user = User.objects.get(username=username)
+        member = Member.objects.get(user=user)
+        team = RescueTeam.objects.get(id=member.team.id)
+        
+        alert = Alert.objects.create(from_employee=user, from_team=team, location=location, city=city, state=state, categories=categories, description=description)
+        alert.save()
+            
+        websocket_send_alert(alert)
+        
+        return JsonResponse({
+            "message": "Raised alarm! Help is on the way...",
+            "success": True,
+            "username": username,
+            "name": user.first_name + " " + user.last_name,
+            "city": team.city,
+            "state": team.state,
+            "type": "employee"
+        })
+        
     else:
         return JsonResponse({"error": "Method not allowed!"})

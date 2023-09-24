@@ -5,4 +5,6 @@ urlpatterns = [
     path("raiseAlert", views.raiseAlert, name="raiseAlert"),
     path("sendAlert", views.sendAlert, name="sendAlert"),
     path("viewRaisedAlert", views.viewRaisedAlert, name="viewRaisedAlert"),
+    path("loginAuthority", views.app_login_authority, name="loginAuthority"),
+    path("loginEmployee", views.app_login_employee, name="loginEmploy")
 ]

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Alert
 from django.db.models import Q
 from .consumers import AlertConsumer 
+from django.http import JsonResponse
 
 def raiseAlert(request):
     if not request.session.get('username'):
@@ -96,3 +97,55 @@ def sendAlert(request):
         except Exception as e:
             print(e)
             return HttpResponse('Server error!')
+        
+def app_login_authority(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = User.objects.get(username=username, password=password)
+        if user is None:
+            return JsonResponse({"error": "Invalid username or password!"})
+        
+        team = RescueTeam.objects.get(user=user)
+        if team is None:
+            return JsonResponse({"error": "Team does not exist!"})
+        
+        return JsonResponse(
+            {
+                "success": True,
+                "username": username,
+                "name": user.first_name+" "+user.last_name,
+                "city": team.city,
+                "state": team.state
+            }
+        )
+    else:
+        return JsonResponse({"error": "Method not allowed!"})
+    
+def app_login_employee(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = User.objects.get(username=username, password=password)
+        if user is None:
+            return JsonResponse({"error": "Invalid username or password!"})
+        
+        member = Member.objects.get(user=user)
+        if member is None:
+            return JsonResponse({"error": "Employee not registered under any authority!"})
+        
+        team = RescueTeam.objects.get(id=member.team.id)
+        if team is None:
+            return JsonResponse({"error": "Team does not exist!"})
+        
+        return JsonResponse(
+            {
+                "success": True,
+                "username": username,
+                "name": user.first_name+" "+user.last_name,
+                "city": team.city,
+                "state": team.state
+            }
+        )
+    else:
+        return JsonResponse({"error": "Method not allowed!"})

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | View raised alerts
+{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center my-3">
+            <span class="page-heading">
+                View raised alerts | Suraksha Portal
+            </span>
+        </div>
+        {% for alert in alertList %}
+        <div class="col-sm-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{alert.city}}</td>
+                        <td>{{alert.state}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Categories</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{alert.description}}</td>
+                        <td>
+                            <ul class="no-decoration">
+                            {% for category in alert.categories %}
+                                <li>{{category}}</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}

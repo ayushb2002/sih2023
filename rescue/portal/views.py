@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .models import RescueTeam, RequestHelp, RequestItems, Member
+from django.db.models import Q
 
 def index(request):
     if request.session.get('username'):
@@ -410,7 +411,7 @@ def trackItemRequests(request):
             
         requestData.append(dataDict)
     
-    context['requests'] = requestData
+    context['requests'] = requestData[::-1]
     return render(request, "request/trackItems.html", context)
 
 def grantItems(request):
@@ -430,6 +431,7 @@ def grantItems(request):
         for data in reqList:
             team_det = RescueTeam.objects.get(id=data["_from_id"])
             user_det = User.objects.get(username=team_det.user)
+            location = team_det.gps_coordinate.split(' ')
             dataDict = {
                 "id": data["id"],
                 "name": user_det.first_name + " " + user_det.last_name,
@@ -441,6 +443,8 @@ def grantItems(request):
                 "city": team_det.city,
                 "state": team_det.state,
                 "pincode": team_det.pincode,
+                "lat": location[1],
+                "long": location[3],
                 "items": []
             }
             
@@ -608,7 +612,7 @@ def saveRequestedHelp(request):
             description = request.POST.get('description')
             user = User.objects.get(username=request.session.get('username'))
             team = RescueTeam.objects.get(user=user)
-            
+            categories = [i.upper() for i in categories]
             reqHelp = RequestHelp.objects.create(_from=team, description=description, categories_requested=categories, deadline=deadline)
             reqHelp.save()
             
@@ -630,9 +634,92 @@ def trackHelp(request):
     context['name'] = request.session.get('name')
     context['type'] = request.session.get('type')
     
+    try:
+        user = User.objects.get(username=request.session.get('username'))
+        team = RescueTeam.objects.get(user=user)
+        reqList = RequestHelp.objects.filter(_from=team).values()
+        requestData = []
+        
+        for data in reqList:
+            dataDict = {
+                "id": data["id"],
+                "deadline": data['deadline'],
+                "priority": data['priority_call'],
+                "categories": data['categories_requested'],
+                "description": data['description'],
+                "answered": data['answered'],
+                "completed": data['completed'],
+            }
+            
+            if data['answered'] == True:
+                answer_user_det = User.objects.get(username=data['answeredBy'])
+                answer_team_det = RescueTeam.objects.get(user=answer_user_det)
+                dataDict['answeredByName'] = answer_user_det.first_name + ' ' + answer_user_det.last_name
+                dataDict['answeredByEmail'] = answer_user_det.email
+                dataDict['answeredByContact'] = answer_team_det.contact
+                dataDict['answeredByAddress'] = answer_team_det.address_line_1 + ', '+answer_team_det.address_line_2
+                dataDict['answeredByCity'] = answer_team_det.city
+                dataDict['answeredByState'] = answer_team_det.state
+                dataDict['answeredByPincode'] = answer_team_det.pincode
+            
+            requestData.append(dataDict)
+            
+        context['requests'] = requestData[::-1]
+    except Exception as e:
+        print(e)
+        context['message'] = "Could not load data from server! Please try again later."
+        
     return render(request, "help/trackHelp.html", context)
-    
+
 def grantHelp(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+
+    try:
+        user = User.objects.get(username=request.session.get('username'))
+        team = RescueTeam.objects.get(user=user)
+
+        category_matches = Q()
+        for category in team.category:
+            category_matches |= Q(categories_requested__contains=[category])
+
+        reqList = RequestHelp.objects.filter(
+            category_matches, answered=False, completed=False
+        ).exclude(_from=team).values()
+
+        requestData = []
+
+        for data in reqList:
+            team_det = RescueTeam.objects.get(id=data["_from_id"])
+            user_det = User.objects.get(username=team_det.user)
+            dataDict = {
+                "id": data["id"],
+                "name": user_det.first_name + " " + user_det.last_name,
+                "deadline": data['deadline'],
+                "priority": data['priority_call'],
+                "addr_line_1": team_det.address_line_1,
+                "addr_line_2": team_det.address_line_2,
+                "city": team_det.city,
+                "state": team_det.state,
+                "pincode": team_det.pincode,
+                "categories": data['categories_requested'],
+                "description": data['description']
+            }
+            requestData.append(dataDict)
+
+        context['requests'] = requestData
+    except Exception as e:
+        print(e)
+        context['message'] = "Could not load data from server! Please try again later."
+
+    return render(request, "help/grantHelp.html", context)
+
+def lendHelp(request):
     if not request.session.get('username'):
         return HttpResponse('404! Page not found!')
     
@@ -641,8 +728,21 @@ def grantHelp(request):
     context['name'] = request.session.get('name')
     context['type'] = request.session.get('type')
     
-    return render(request, "help/grantHelp.html", context)
-    
+    if request.method == "POST":
+        try:
+            reqId = request.POST.get('id')
+            reqObj = RequestHelp.objects.get(id=reqId)
+            reqObj.answered = True
+            reqObj.answeredBy = request.session.get('username')
+            reqObj.save()
+            return redirect(grantedHelp)
+        except Exception as e:
+            print(e)
+            context['message'] = "Could not lend help! Please try again later!"
+            return render(request, "help/grantHelp.html", context)
+    else:
+        return HttpResponse('Method not allowed')
+
 def grantedHelp(request):
     if not request.session.get('username'):
         return HttpResponse('404! Page not found!')
@@ -652,4 +752,83 @@ def grantedHelp(request):
     context['name'] = request.session.get('name')
     context['type'] = request.session.get('type')
     
+    try:
+        reqList = RequestHelp.objects.filter(answered=True, completed=False, answeredBy=request.session.get('username')).values()
+        requestData = []
+        
+        for data in reqList:
+            team_det = RescueTeam.objects.get(id=data["_from_id"])
+            user_det = User.objects.get(username=team_det.user)
+            dataDict = {
+                "name": user_det.first_name + " " + user_det.last_name,
+                "team_contact": team_det.contact,
+                "team_email": user_det.email,
+                "deadline": data['deadline'],
+                "priority": data['priority_call'],
+                "addr_line_1": team_det.address_line_1,
+                "addr_line_2": team_det.address_line_2,
+                "city": team_det.city,
+                "state": team_det.state,
+                "pincode": team_det.pincode,
+                "categories": data['categories_requested'],
+                "description": data['description']
+            }
+            requestData.append(dataDict)
+            
+        context['requests'] = requestData
+    except Exception as e:
+        print(e)
+        context['message'] = "Could not load data from server! Please try again later."
+    
     return render(request, "help/grantedHelp.html", context)
+
+def markHelpCompleted(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == "POST":
+        try:
+            requestId = request.POST.get('id')
+            reqObj = RequestHelp.objects.get(id=requestId)
+            reqObj.completed = True
+            reqObj.save()
+            
+            context["message"] = "Successfully marked as completed!"
+            return render(request, "help/trackHelp.html", context)
+        except Exception as e:
+            print(e)
+            context["message"] = "Cannot be marked as completed!"
+            return render(request, "help/trackHelp.html", context)
+    else:
+        return HttpResponse('Method not allowed')    
+    
+
+def markHelpUrgent(request):
+    if not request.session.get('username'):
+        return HttpResponse('404! Page not found!')
+    
+    context = {}
+    context['username'] = request.session.get('username')
+    context['name'] = request.session.get('name')
+    context['type'] = request.session.get('type')
+    
+    if request.method == "POST":
+        try:
+            requestId = request.POST.get('id')
+            reqObj = RequestHelp.objects.get(id=requestId)
+            reqObj.priority_call = True
+            reqObj.save()
+            
+            context["message"] = "Priority request raised!"
+            return render(request, "help/trackHelp.html", context)
+        except Exception as e:
+            print(e)
+            context["message"] = "Cannot be marked as completed!"
+            return render(request, "help/trackHelp.html", context)
+    else:
+        return HttpResponse('Method not allowed')   

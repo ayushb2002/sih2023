@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Suraksha Portal | Grant Help
+Suraksha Portal | Fulfill a request
 {% endblock title %}
 
 {% block body %}
@@ -10,9 +10,94 @@ Suraksha Portal | Grant Help
     <div class="row">
         <div class="col-sm-12 text-center">
             <span class="page-heading">
-                Grant Help | Suraksha Portal
+                Fulfill a request | Suraksha Portal
             </span>
         </div>
+
+        {% if message %}
+        <div class="col-sm-12 text-center">
+            <span class="text-warning">
+                {{message}}
+            </span>
+        </div>
+        {% endif %}
+
+        {% for request in requests %}
+        <div class="col-sm-12 row p-5">
+            <div class="col-lg-6 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Team Name</td>
+                            <td>{{request.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>{{request.deadline}}</td>
+                        </tr>
+                        <tr>
+                            <td>Categories</td>
+                            <td>
+                                <ul class="no-decoration">
+                                {% for category in request.categories %}
+                                    <li>{{category}}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Description</td>
+                            <td>{{request.description}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{request.addr_line_1}}, {{request.addr_line_2}}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>{{request.city}}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>{{request.state}}</td>
+                        </tr>
+                        <tr>
+                            <td>Pincode</td>
+                            <td>{{request.pincode}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-12 d-flex justify-content-end">
+                <form action="{% url 'lendHelp' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{request.id}}">
+                    <button class="btn btn-success" type="submit">Lend help</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+
+
+
     </div>
 </div>
 

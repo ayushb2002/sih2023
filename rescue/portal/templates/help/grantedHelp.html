@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-Suraksha Portal | Granted Help
+Suraksha Portal | View granted help
 {% endblock title %}
 
 {% block body %}
@@ -10,9 +10,93 @@ Suraksha Portal | Granted Help
     <div class="row">
         <div class="col-sm-12 text-center">
             <span class="page-heading">
-                Granted Help | Suraksha Portal
+                View Granted Help | Suraksha Portal
             </span>
         </div>
+
+        {% if message %}
+        <div class="col-sm-12 text-center">
+            <span class="text-warning">
+                {{message}}
+            </span>
+        </div>
+        {% endif %}
+
+        {% for request in requests %}
+        <div class="col-sm-12 row p-5">
+            <div class="col-lg-6 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Team Name</td>
+                            <td>{{request.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Contact details</td>
+                            <td>{{request.team_contact}}</td>
+                        </tr>
+                        <tr>
+                            <td>Email Address</td>
+                            <td>{{request.team_email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Deadline</td>
+                            <td>{{request.deadline}}</td>
+                        </tr>
+                        <tr>
+                            <td>Categories</td>
+                            <td>
+                                <ul class="no-decoration">
+                                {% for category in request.categories %}
+                                    <li>{{category}}</li>
+                                {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Description</td>
+                            <td>{{request.description}}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>{{request.addr_line_1}}, {{request.addr_line_2}}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>{{request.city}}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>{{request.state}}</td>
+                        </tr>
+                        <tr>
+                            <td>Pincode</td>
+                            <td>{{request.pincode}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+
     </div>
 </div>
 

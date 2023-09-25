@@ -40,7 +40,7 @@ class RequestItems(models.Model):
         return str(self.deadline) 
 class RequestHelp(models.Model):
     _from = models.ForeignKey(RescueTeam, on_delete=models.CASCADE, blank=False)
-    description = models.CharField(max_length=200, null=False, blank=False)
+    description = models.CharField(max_length=400, null=False, blank=False)
     categories_requested = ArrayField(models.CharField(max_length=50), null=False, blank=False)
     deadline = models.DateField(null=False, blank=False)
     completed = models.BooleanField(null=False, blank=False, default=False)   

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}
+Suraksha Portal | Raise an alert
+{% endblock title %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 text-center my-3">
+            <span class="page-heading">
+                Raise an alert | Suraksha Portal
+            </span>
+        </div>
+        {% if message %}
+        <div class="col-sm-12 p-5">
+            <span class="text-warning">{{message}}</span>
+        </div>
+        {% endif %}
+        <div class="col-sm-12">
+            <form action="{% url 'sendAlert' %}" method="post">
+                {% csrf_token %}
+                <div class="form-row align-items-center my-3">
+                    <label for="gps">
+                        GPS Coordinates
+                    </label>
+                    <div class="col-auto">
+                        <input type="text" name="gps" class="form-control" id="coordinateField">
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-warning" onclick="getLocation()">Get GPS Coordinates</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city">
+                        City
+                    </label>
+                    <input type="text" name="city" class="form-control" value="{{city}}">
+                </div>
+                <div class="form-group">
+                    <label for="state">
+                        State
+                    </label>
+                    <input type="text" name="state" class="form-control" value="{{state}}">
+                </div>
+                <div class="form-row align-items-center my-3" id="freeze">
+                    <label for="categories">Add categories</label>
+                    <div class="form-check">
+                        <input type="checkbox" name="categories[]" class="form-check-input" value="Emergency Responders">
+                        <label for="categories" class="form-check-label">Emergency Responders</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="categories[]" class="form-check-input" value="Fire Station">
+                        <label for="categories" class="form-check-label">Fire Station</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="categories[]" class="form-check-input" value="Police Station">
+                        <label for="categories" class="form-check-label">Police Station</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="categories[]" class="form-check-input" value="Medical">
+                        <label for="categories" class="form-check-label">Medical</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="categories[]" class="form-check-input" value="Forest Station">
+                        <label for="categories" class="form-check-label">Forest Station</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" name="categories[]" class="form-check-input" value="Crime Branch">
+                        <label for="categories" class="form-check-label">Crime Branch</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Raise alarm!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

@@ -30,3 +30,8 @@
 .form-box{
     background-color: #DCE775;
 }
+
+.no-decoration
+{
+    list-style-type: none;
+}

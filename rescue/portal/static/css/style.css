@@ -14,3 +14,19 @@
     font-size: 1.4em;
     font-weight: 400;
 }
+
+.nav-bg{
+    background-color: #AFB42B !important;
+}
+
+.form-center{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.form-box{
+    background-color: #DCE775;
+}

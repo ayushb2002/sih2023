@@ -3,90 +3,97 @@
 {% block register %}
 
 
-<div class="m-5 text-center">
-    <span class="form-heading">Authority registration</span>
-    <form action="{% url 'registerService' %}" method="post" class="text-left">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="name">
-                Station Name
-            </label>
-            <input type="text" name="name" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="category">
-                Category
-            </label>
-            <input type="text" name="category" class="form-control" placeholder="For multiple categories, use comma">
-        </div>
-        <div class="form-group">
-            <label for="contact">
-                Contact Number
-            </label>
-            <input type="text" name="contact" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="line1">
-                Address Line 1
-            </label>
-            <input type="text" name="line1" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="line2">
-                Address Line 2
-            </label>
-            <input type="text" name="line2" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="city">
-                City
-            </label>
-            <input type="text" name="city" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="state">
-                State
-            </label>
-            <input type="text" name="state" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="pincode">
-                Pin code
-            </label>
-            <input type="number" min="100000" max="999999" name="pincode" class="form-control">
-        </div>
-        <div class="form-row align-items-center my-3">
-            <label for="gps">
-                GPS Coordinates
-            </label>
-            <div class="col-auto">
-                <input type="text" name="gps" class="form-control" id="coordinateField">
+<div class="m-2 text-center">
+    <div class="col-sm-12 text-center mt-2">
+        <span class="form-heading">Authority registration</span>
+    </div>
+    <div class="col-sm-12 p-5">
+
+        <form action="{% url 'registerService' %}" method="post" class="text-left">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">
+                    Station Name
+                </label>
+                <input type="text" name="name" class="form-control">
             </div>
-            <div class="col-auto">
-                <button type="button" class="btn btn-warning" onclick="getLocation()">Get GPS Coordinates</button>
+            <div class="form-group">
+                <label for="category">
+                    Category
+                </label>
+                <input type="text" name="category" class="form-control" placeholder="For multiple categories, use comma">
             </div>
-        </div>
-        <div class="form-group">
-            <label for="email">
-                Email Address
-            </label>
-            <div class="input-group">
-                <input type="text" name="email" class="form-control">
-                <div class="input-group-append">
-                    <span class="input-group-text">@suraksha.com</span>
+            <div class="form-group">
+                <label for="contact">
+                    Contact Number
+                </label>
+                <input type="text" name="contact" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="line1">
+                    Address Line 1
+                </label>
+                <input type="text" name="line1" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="line2">
+                    Address Line 2
+                </label>
+                <input type="text" name="line2" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="city">
+                    City
+                </label>
+                <input type="text" name="city" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="state">
+                    State
+                </label>
+                <input type="text" name="state" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="pincode">
+                    Pin code
+                </label>
+                <input type="number" min="100000" max="999999" name="pincode" class="form-control">
+            </div>
+            <div class="form-row align-items-center my-3">
+                <label for="gps">
+                    GPS Coordinates
+                </label>
+                <div class="col-auto">
+                    <input type="text" name="gps" class="form-control" id="coordinateField">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-warning" onclick="getLocation()">Get GPS Coordinates</button>
                 </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label for="password">
-                Password
-            </label>
-            <input type="password" name="password" class="form-control">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">Register</button>
-        </div>
-    </form>
+            <div class="form-group">
+                <label for="email">
+                    Email Address
+                </label>
+                <div class="input-group">
+                    <input type="text" name="email" class="form-control">
+                    <div class="input-group-append">
+                        <span class="input-group-text">@suraksha.com</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">
+                    Password
+                </label>
+                <input type="password" name="password" class="form-control">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Register</button>
+            </div>
+        </form>
+    </div>
+
 </div>
+    
 
 {% endblock register %}

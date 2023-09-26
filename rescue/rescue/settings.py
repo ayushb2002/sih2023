@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'portal',
     'alert',
-    'channels'
+    'channels',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = "rescue.urls"
@@ -76,6 +78,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "rescue.wsgi.application"
 ASGI_APPLICATION = "rescue.asgi.application"
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

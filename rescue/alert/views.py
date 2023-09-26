@@ -9,22 +9,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 import json
 
-def websocket_send_alert(alert):
+def websocket_send_alert(param):
     channel_layer = get_channel_layer()
-    data = {
-        "type": "send_alert",
-        "description": alert.description,
-        "categories": alert.categories,
-        "city": alert.city,
-        "state": alert.state,
-        "location": alert.location
-    }
-    city = alert.city.replace(" ", "")
-    state = alert.state.replace(" ", "")
+    param['type'] = "send_alert"
+    city = param['city'].replace(" ", "")
+    state = param['state'].replace(" ", "")
     
+    print(param)
     async_to_sync(channel_layer.group_send)(
         f'alert_{city}_{state}',
-        data
+        param
     )
 
 def raiseAlert(request):
@@ -62,15 +56,15 @@ def viewRaisedAlert(request):
     for alert in alerts:
         alertList.append(
             {
-                "description": alert.description,
-                "location": alert.location,
-                "city": alert.city,
-                "state": alert.state,
-                "categories": alert.categories
+                "description": alert.get('description'),
+                "location": alert.get('location'),
+                "city": alert.get('city'),
+                "state": alert.get('state'),
+                "categories": alert.get('categories')
             }
         )
     
-    context["alertList"] = alertList
+    context["alertList"] = alertList[::-1]
     return render(request, "alert/viewAlert.html", context)
 
 def sendAlert(request):
@@ -84,6 +78,7 @@ def sendAlert(request):
     
     if request.method == "POST":
         try:
+            print(request.POST)
             user = User.objects.get(username=request.session.get('username'))
             member = Member.objects.get(user=user)
             team = RescueTeam.objects.get(id=member.team.id)
@@ -91,13 +86,20 @@ def sendAlert(request):
             city = request.POST.get('city').upper()
             state = request.POST.get('state').upper()
             description = request.POST.get('description')
-            categories = request.POST.getlist('categories')
+            categories = request.POST.getlist('categories[]')
             categories = [i.upper() for i in categories]
-                
+
+            param = {
+                "description": description,
+                "location": location,
+                "city": city,
+                "state": state,
+                "categories": categories
+            }
+            websocket_send_alert(param)
+            
             alert = Alert.objects.create(from_employee=user, from_team=team, location=location, city=city, state=state, categories=categories, description=description)
             alert.save()
-            
-            websocket_send_alert(alert)
             
             context['message'] = "Successfully raised alarm!"
             return render(request, 'alert/sendAlert.html', context=context)
@@ -105,6 +107,8 @@ def sendAlert(request):
         except Exception as e:
             print(e)
             return HttpResponse('Server error!')
+    else:
+        return HttpResponse('Method not allowed!')
 
 @csrf_exempt
 def app_login_authority(request):

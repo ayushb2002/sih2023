@@ -1,5 +1,4 @@
 import * as React from "react";
-import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -7,8 +6,8 @@ import HomeScreen from "./screens/Homescreen";
 import EmployeeLogin from "./screens/EmployeeLogin";
 import AuthorityLogin from "./screens/AuthorityLogin";
 import AlarmScreen from "./screens/AlarmScreen";
-// AlarmScreen
 import Login from "./screens/Login";
+import LoggedInScreen from "./screens/LoggedInScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +20,7 @@ function App() {
         <Stack.Screen name="EmployeeLogin" component={EmployeeLogin} />
         <Stack.Screen name="AuthorityLogin" component={AuthorityLogin} />
         <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
+        <Stack.Screen name="LoggedInScreen" component={LoggedInScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

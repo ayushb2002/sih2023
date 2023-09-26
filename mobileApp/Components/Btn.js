@@ -5,8 +5,6 @@ import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 const Btn = ({ title, onPress }) => {
   return (
     <View style={{ margin: 5 }}>
-      {/* <Button> */}
-      {/* </Button> */}
       <TouchableOpacity onPress={onPress} style={styles.button}>
         <Text style={styles.buttonText}>{title}</Text>
       </TouchableOpacity>

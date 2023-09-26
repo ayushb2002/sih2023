@@ -1,6 +1,5 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-
 import Btn from "../Components/Btn";
 
 const HomeScreen = ({ navigation }) => {
@@ -24,22 +23,25 @@ const HomeScreen = ({ navigation }) => {
         />
 
         <Text style={styles.mainText}>Suraksha App</Text>
-        <Text style={styles.secondaryText}>AlertNess at your finger Tips</Text>
+        <Text style={styles.secondaryText}>Disaster Management made easy!</Text>
         <Btn
           title={"Employee Login "}
-          onPress={() => {
+          onPress={(e) => {
+            e.preventDefault();
             navigation.navigate("EmployeeLogin");
           }}
         />
         <Btn
           title={"Authority Login "}
-          onPress={() => {
+          onPress={(e) => {
+            e.preventDefault();
             navigation.navigate("AuthorityLogin");
           }}
         />
         <Btn
           title={"Raise Alarm"}
-          onPress={() => {
+          onPress={(e) => {
+            e.preventDefault();
             navigation.navigate("AlarmScreen");
           }}
         />

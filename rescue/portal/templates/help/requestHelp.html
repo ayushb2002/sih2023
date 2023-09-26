@@ -18,7 +18,7 @@ Suraksha Portal | Request for help
             <span class="text-warning">{{message}}</span>
         </div>
         {% endif %}
-        <div class="col-sm-12">
+        <div class="col-sm-12 form-center">
             <form action="{% url 'saveRequestedHelp' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">

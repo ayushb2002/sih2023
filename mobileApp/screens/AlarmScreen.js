@@ -11,7 +11,7 @@ const AlarmScreen = () => {
 
   //   useEffect(() => {
   //     // Create a WebSocket connection when the component mounts
-  //     const ws = new WebSocket("ws://127.0.0.1:8000/");
+  //     const ws = new WebSocket("ws://10.0.2.2:8000/");
   //     setSocket(ws);
 
   //     ws.onopen = () => {
@@ -80,7 +80,7 @@ export default AlarmScreen;
 
 //   const initiateSocketConnection = () => {
 //     // Add URL to the server which will contain the server side setup
-//     const ws = new WebSocket(`ws://127.0.0.1:8000/`);
+//     const ws = new WebSocket(`ws://10.0.2.2:8000/`);
 
 //     // When a connection is made to the server, send the user ID so we can track which
 //     // socket belongs to which user

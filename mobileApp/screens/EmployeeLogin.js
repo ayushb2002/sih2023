@@ -1,25 +1,28 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, TextInput, Button, View } from "react-native";
-import { useEffect, useState } from "react";
-import * as MailComposer from "expo-mail-composer";
-import * as Print from "expo-print";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
 import axios from "axios";
-// const baseUrl = 'https://reqres.in';
-// expo add expo-print expo-mail-composer
 
-const EmployeeLogin = () => {
+const EmployeeLogin = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const { data } = await axios.post(
-      "/http://127.0.0.1:8000/alert/loginEmployee",
-      {
-        username: email,
-        password,
-      }
-    );
-    console.log("data in employee login ", data);
+    try
+    {
+      const { data } = await axios.post("http://10.0.2.2:8000/alert/loginEmployee",
+        {
+          "username": email,
+          "password": password,
+        }
+      );
+      await AsyncStorage.setItem("user", JSON.stringify(data));
+      navigation.navigate("LoggedInScreen");
+    }
+    catch (err)
+    {
+      console.log(err);
+    }
   };
 
   return (
@@ -63,14 +66,5 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
 });
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
 
 export default EmployeeLogin;

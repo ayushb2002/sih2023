@@ -1,8 +1,28 @@
 import { View, Text, Image, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Btn from "../Components/Btn";
+import { useEffect } from "react"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = ({ navigation }) => {
+
+  useEffect(() => {
+    async function checkIfLoggedIn() {
+      try{
+        let userDataJson = await AsyncStorage.getItem("user");
+        let userDataObj = JSON.parse(userDataJson);
+        if(userDataObj["success"] == true)
+          navigation.navigate("LoggedInScreen")
+      }
+      catch(err)
+      {
+        console.log(err)
+      }
+    }
+
+    checkIfLoggedIn();
+  }, [])
+
   return (
     <View
       style={{

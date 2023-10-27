@@ -15,7 +15,21 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "purple",
+            },
+            headerTintColor: "lightblue",
+            headerTitleStyle:{
+              fontWeight: "bold",
+              fontSize: 28,
+            },
+            headerTitleAlign: "center",
+          }}
+        />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="EmployeeLogin" component={EmployeeLogin} />
         <Stack.Screen name="AuthorityLogin" component={AuthorityLogin} />
